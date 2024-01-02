@@ -1,0 +1,33 @@
+﻿@using CatCode_WikiNovel.Controllers
+@using WowCommon
+@using WowCore
+@using WowSQL
+@using System.Data
+@{
+    var dt = Methods.GetSettingProcedure("sp_DanhSachHienThiTrangChu");
+    if (!dt.AnyRow())
+    {
+        return;
+    }
+}
+
+<div id="DanhSach_HienThi_TrangChu" class="col-lg-12">
+    <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
+        @{
+            await Html.RenderPartialAsync(@"..\TitleCard.cshtml", new Dictionary<string, object> (){
+            {"icon","ri-heart-fill"},
+            {"title","Được yêu thích nhất"},
+            {"text_right_button","Xem thêm"},
+        {"url_right_button","/Truyen/TimKiem"},
+            });
+        }
+        <div class="iq-card-body">
+            <div class="row">
+                @foreach (DataRow drItem in dt.Rows)
+                {
+                    await Html.RenderPartialAsync(@"..\ItemCard.cshtml", new Dictionary<string, object>() { { "drItem", drItem }, });
+                }
+            </div>
+        </div>
+    </div>
+</div>

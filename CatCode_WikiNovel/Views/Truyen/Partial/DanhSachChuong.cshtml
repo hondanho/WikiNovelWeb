@@ -1,0 +1,34 @@
+﻿@using WowSQL
+@using WowCore
+@using System.Data
+@model Dictionary<string, object>
+@{
+
+
+}
+<div class="col-lg-6">
+    <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
+        @{
+            await Html.RenderPartialAsync(@"..\..\Common\TitleCard.cshtml", new Dictionary<string, object>(){
+                {"icon","ri-bar-chart-horizontal-fill"},
+                {"title","Danh sách chương"},
+            });
+        }
+        <div class="iq-card-body trendy-contens">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <table id="table-chapter" class="" style="width:100%">
+                        <thead style="display: none;">
+                            <tr>
+                                <th>Chương</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

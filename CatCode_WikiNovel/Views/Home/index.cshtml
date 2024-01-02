@@ -1,0 +1,22 @@
+﻿@using WowSQL
+@model Dictionary<string,object>
+@{
+    ViewBag.og_title = "Truyện Free mới mỗi ngày";
+    ViewBag.canonical = "https://truyenfree.net/";
+}
+
+
+<div class="row">
+    @*@await Html.PartialAsync(@"..\Common\TrangChu\DanhSach_HienThi_NoiBat_TrangChu.cshtml")*@
+
+    @await Html.PartialAsync(@"..\Common\Truyen\DanhSach_TruyenDangDoc.cshtml")
+
+    @await Html.PartialAsync(@"..\Common\TrangChu\DanhSach_HienThi_TrangChu.cshtml")
+
+    @await Html.PartialAsync(@"..\Common\TrangChu\TruyenNoiBatTrongTuan.cshtml")
+    @await Html.PartialAsync(@"..\Common\TrangChu\DanhSach_TacGia_DuocYeuThich.cshtml")
+
+    @await Html.PartialAsync(@"..\Common\TrangChu\DanhSach_PhaiDocNgay.cshtml")
+
+    @await Html.PartialAsync(@"..\Common\Truyen\DanhSach_TheLoai.cshtml")
+</div>

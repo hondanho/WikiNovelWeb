@@ -1,0 +1,163 @@
+@media (min-width: 992px) {
+    .modal-backdrop.show {
+        opacity: 0 !important;
+    }
+}
+
+.modal.right .modal-dialog {
+    position: fixed;
+    margin: auto;
+    width: 380px;
+    height: 520px;
+    -webkit-transform: translate3d(0%, 0, 0);
+    -ms-transform: translate3d(0%, 0, 0);
+    -o-transform: translate3d(0%, 0, 0);
+    transform: translate3d(0%, 0, 0);
+}
+
+.modal.right .modal-content {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.modal.right .modal-body {
+    padding: 15px 15px 80px;
+}
+
+.modal.right.fade .modal-dialog {
+    right: -320px;
+    left: auto;
+    -webkit-transition: opacity 0.3s linear, right 0.3s ease-out;
+    -moz-transition: opacity 0.3s linear, right 0.3s ease-out;
+    -o-transition: opacity 0.3s linear, right 0.3s ease-out;
+    transition: opacity 0.3s linear, right 0.3s ease-out;
+}
+
+.modal.right.fade.show .modal-dialog {
+    right: 70px;
+}
+
+#PhanhoiModal {
+    text-align: center;
+}
+
+    #PhanhoiModal h5 {
+        font-family: "Plus Jakarta Sans";
+        font-style: normal;
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 20px;
+        letter-spacing: 0.01em;
+        color: var(--iq-primary);
+        margin-bottom: 10px;
+        margin-top: 32px;
+    }
+
+    #PhanhoiModal form {
+        padding: 0 35px;
+    }
+
+        #PhanhoiModal form .btn {
+            margin: 0;
+        }
+
+    #PhanhoiModal .modal-body {
+        padding: 0;
+    }
+
+        #PhanhoiModal .modal-body dt {
+            font-family: "Roboto";
+            font-style: normal;
+            font-weight: 700;
+            font-size: 14px;
+            line-height: 17px;
+            letter-spacing: 0.02em;
+            color: #F4A442;
+            margin-bottom: 10px;
+        }
+
+        #PhanhoiModal .modal-body button {
+            border: none;
+            background: none;
+        }
+
+        #PhanhoiModal .modal-body .box-phanhoi {
+            width: 100%;
+            height: 213px;
+            background: #F6F6F6;
+            border: 1px solid #F6F6F6;
+            border-radius: 12px !important;
+            margin: 30px auto 27px;
+            padding: 10px;
+        }
+
+.btn-phanhoi {
+    position: fixed;
+    right: 0;
+    bottom: 25%;
+    z-index: 9999;
+    border: none;
+    background: none;
+    padding: 0;
+    height: 150px;
+}
+
+.modal-open .btn-phanhoi {
+    margin-right: 8px;
+}
+
+.btn-green {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+    .btn-green:hover, .btn.applyBtn:hover {
+        color: white;
+    }
+
+.btn-gray {
+    background: #EDEDED;
+    color: var(--iq-gray);
+}
+.h-20px {
+    height: 20px;
+}
+
+
+
+.modal .modal-dialog {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%) !important;
+}
+
+    .modal .modal-dialog .modal-content {
+        background: #FFFFFF;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 10px;
+        border: none;
+    }
+
+        .modal .modal-dialog .modal-content .modal-header, .modal .modal-dialog .modal-content .modal-footer {
+            border: none;
+        }
+
+        .modal .modal-dialog .modal-content .modal-title {
+            font-family: "Plus Jakarta Sans";
+            font-weight: 600;
+            font-size: 24px;
+            line-height: 150%;
+            letter-spacing: -0.03em;
+            color: #141522;
+        }
+
+        .modal .modal-dialog .modal-content label {
+            font-family: "Plus Jakarta Sans";
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 18px;
+            letter-spacing: 0.01em;
+            color: #1E2022;
+        }

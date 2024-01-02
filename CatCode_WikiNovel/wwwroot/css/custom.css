@@ -1,0 +1,208 @@
+
+.max-line-1 {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 1 !important; /* number of lines to show */
+    line-clamp: 1 !important;
+    -webkit-box-orient: vertical !important;
+}
+
+.max-line-2 {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important; /* number of lines to show */
+    line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+}
+
+.max-line-3 {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 3 !important; /* number of lines to show */
+    line-clamp: 3 !important;
+    -webkit-box-orient: vertical !important;
+}
+
+.max-line-4 {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 3 !important; /* number of lines to show */
+    line-clamp: 3 !important;
+    -webkit-box-orient: vertical !important;
+}
+
+.max-line-10 {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 10 !important; /* number of lines to show */
+    line-clamp: 10 !important;
+    -webkit-box-orient: vertical !important;
+}
+
+
+
+
+.modal-dialog {
+    width: 99.9%;
+    max-width: none;
+    height: 100%;
+    margin: 0;
+}
+
+.modal-content {
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+}
+
+.modal-body {
+    overflow-y: auto;
+}
+#item-noidung-chuong div img {
+    width: 100%;
+    max-width: 600px;
+}
+#item-noidung-chuong div  {
+    text-align:center;
+}
+
+#item-noidung-chuong, #item-noidung-chuong p, .font-truyen {
+    text-align: justify;
+    font-size: 26px;
+    font-family: palatino linotype,arial,times new roman,sans-serif;
+    line-height: 180%;
+    color: #2b2b2b;
+    text-align: left;
+    word-wrap: break-word;
+}
+
+.item-title-truyen {
+    text-align: justify;
+    font-size: 26px;
+    font-family: palatino linotype,arial,times new roman,sans-serif;
+    color: #2b2b2b;
+    text-align: left;
+    word-wrap: break-word;
+}
+
+    .item-title-truyen img {
+        height: 50px;
+    }
+
+.modal-content ::-webkit-scrollbar-thumb {
+    display: unset !important;
+    background: var(--iq-primary);
+}
+
+.modal-content ::-webkit-scrollbar-track {
+    background: white;
+}
+
+
+
+::-webkit-scrollbar-thumb {
+    display: none;
+}
+
+.modal-header-title {
+    display: flex;
+}
+
+button.item-button-chuong i {
+    line-height: 20px;
+}
+
+button.item-button-chuong {
+    margin-left: 5px;
+}
+
+.btn-primary.disabled, .btn-primary:disabled {
+    color: var(--iq-white);
+    background-color: #808080;
+    border-color: #808080;
+}
+
+    .btn-primary.disabled:hover {
+        background-color: #808080 !important;
+        border-color: #808080 !important;
+    }
+
+
+
+#button-back-to-top {
+    display: inline-block;
+    background-color: var(--iq-primary);
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    border-radius: 4px;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    transition: background-color .3s, opacity .5s, visibility .5s;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1000;
+}
+
+    #button-back-to-top::after {
+        content: "\f077";
+        font-family: FontAwesome;
+        font-weight: normal;
+        font-style: normal;
+        font-size: 2em;
+        line-height: 50px;
+        color: #fff;
+    }
+
+    #button-back-to-top:hover {
+        cursor: pointer;
+        background-color: #333;
+    }
+
+    #button-back-to-top:active {
+        background-color: #555;
+    }
+
+    #button-back-to-top.show {
+        opacity: 1;
+        visibility: visible;
+    }
+
+/* Styles for the content section */
+
+@media (min-width: 500px) {
+    #button-back-to-top {
+        margin: 30px;
+    }
+}
+
+.menu-the-loai {
+}
+
+    .menu-the-loai .row-the-loai {
+        padding-left: 15px;
+        padding-right: 5px;
+    }
+
+.menu-the-loai .row-the-loai .cell-the-loai {
+    padding: 5px;
+}
+
+.menu-the-loai .row-the-loai .cell-the-loai a {
+    border: 1px solid lightgray;
+}
+    .menu-the-loai .row-the-loai .cell-the-loai a:hover {
+        color: white;
+        background-color: var(--iq-primary) !important;
+        border-color:white;
+    }
+
+.card .details a {
+    color: unset;
+}

@@ -1,0 +1,73 @@
+﻿@using CatCode_WikiNovel.Controllers
+@using WowCommon
+@using WowCore
+@using WowSQL
+@using System.Data
+@{
+    var dt = Methods.GetSettingProcedure("sp_TruyenNoiBatTrongTuan");
+    if (!dt.AnyRow())
+    {
+        return;
+    }
+    var drItem = dt.Rows[0];
+
+    string? title_KhongDau = drItem["title_KhongDau"]?.ToString();
+    title_KhongDau = title_KhongDau ?? "";
+    title_KhongDau = title_KhongDau.Replace(" ", "-");
+    string? title = drItem["title"]?.ToString();
+    string? tenTacGia = drItem["tenTacGia"]?.ToString();
+    string? dsTheLoai = drItem["dsTheLoai"]?.ToString();
+    string? gioiThieu = drItem["gioiThieu"]?.ToString(); gioiThieu = gioiThieu ?? "";
+    string? urlHinhAnh_image_path = Methods.GetFullURL(drItem["urlHinhAnh_image_path"]?.ToString());
+    if (string.IsNullOrEmpty(urlHinhAnh_image_path))
+    {
+        urlHinhAnh_image_path = "https://truyenfree.net/img2/tu-thu-tay-ha.png";
+    }
+    string? title_url = Methods.GetFullURL(string.Format("?tenTruyen={0}", drItem["title_url"]));
+    string? str_diemDanhGia = drItem["diemDanhGia"]?.ToString();
+    var soLuotDanhGia = Convert.ToDouble(drItem["soLuotDanhGia"]);
+    str_diemDanhGia = str_diemDanhGia ?? "0";
+    int diemDanhGia = Convert.ToInt32(Convert.ToDouble(str_diemDanhGia));
+    var description = Convert.ToString(drItem["description"]);
+
+}
+
+<div class="col-lg-6">
+    <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
+        @{
+            await Html.RenderPartialAsync(@"..\TitleCard.cshtml", new Dictionary<string, object>(){
+        {"icon","ri-fire-fill"},
+        {"title","Nổi bật trong tuần"},
+        {"text_right_button","Xem thêm"},
+        {"url_right_button","/Truyen/TimKiem"},
+        });
+        }
+        <div class="iq-card-body">
+            <div class="row align-items-center">
+                <div class="col-sm-5 pr-0">
+                    <a href="@title_url"><img class="img-fluid rounded w-100" src="@urlHinhAnh_image_path" alt="@title_KhongDau"></a>
+                </div>
+                <div class="col-sm-7 mt-3 mt-sm-0">
+                    <h4 class="mb-2 max-line-2">@title</h4>
+                      <div class="small" itemprop="aggregateRating"><em><strong><span itemprop="ratingValue">@str_diemDanhGia</span></strong>/<span class="text-muted" itemprop="bestRating">10</span><meta itemprop="worstRating" content="1"> từ <strong><span itemprop="ratingCount">@soLuotDanhGia.ToMoneySmall()</span> lượt</strong></em></div>
+                    <div class="mb-2 d-block">
+                        <span class="font-size-11 text-warning">
+                            @for (int i = 1; i <= diemDanhGia; i++)
+                            {
+                                <i class="fa fa-star"></i>
+                            }
+                            @if (Convert.ToDouble(str_diemDanhGia) - diemDanhGia >= 0.5)
+                            {
+                                <i class="fa fa-star-half"></i>
+                            }
+                        </span>
+                    </div>
+                    <span class="text-dark mb-3 d-block max-line-5">
+                        @Html.Raw(description.ToHtml())
+                    </span>
+                    <button type="button" class="btn btn-primary learn-more" onclick="window.location='@title_url'" style="float:right;">Đọc ngay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

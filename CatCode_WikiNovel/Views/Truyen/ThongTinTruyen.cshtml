@@ -1,0 +1,205 @@
+﻿@using CatCode_WikiNovel.Controllers
+@using WowSQL
+@using System.Data
+@using WowCore
+@model Dictionary<string, object>
+@{
+    var dt = Model["data"] as DataTable;
+
+    if (dt == null || !dt.AnyRow())
+    {
+        return;
+    }
+    string? uriChuong = (string)Model["uriChuong"];
+    string? p2 = (string)Model["p2"];
+    string? txtChuong = (string)Model["titleChuong"];
+    if(!string.IsNullOrEmpty(p2))
+    {
+        uriChuong = null;
+    }
+    
+    var dataModel = Model;
+    var drItem = dt.Rows[0];
+
+    string? title_KhongDau = drItem["title_KhongDau"]?.ToString();
+    title_KhongDau = title_KhongDau ?? "";
+    title_KhongDau = title_KhongDau.Replace(" ", "-");
+    string? title = drItem["title"]?.ToString();
+    var soLuongChuong = drItem["soLuongChuong"] != DBNull.Value ? Convert.ToInt32(drItem["soLuongChuong"]) : 0;
+    string? id = drItem["id"]?.ToString(); id = id ?? "";
+    string? tenTacGia = drItem["tenTacGia"]?.ToString();
+    string? dsTheLoai = drItem["dsTheLoai"]?.ToString();
+    string? gioiThieu = drItem["gioiThieu"]?.ToString(); gioiThieu = gioiThieu ?? "";
+    string? description = drItem["description"]?.ToString(); description = description ?? "";
+    string? urlHinhAnh_image_path = Methods.GetFullURL(drItem["urlHinhAnh_image_path"]?.ToString());
+    if (string.IsNullOrEmpty(urlHinhAnh_image_path))
+    {
+        urlHinhAnh_image_path = "https://truyenfree.net/img2/tu-thu-tay-ha.png";
+    }
+    string? title_url = Methods.GetFullURL(string.Format("?tenTruyen={0}", drItem["title_url"]));
+    string? str_diemDanhGia = drItem["diemDanhGia"]?.ToString();
+    var soLuotDanhGia = Convert.ToDouble(drItem["soLuotDanhGia"]);
+
+    str_diemDanhGia = str_diemDanhGia ?? "0";
+    int diemDanhGia = Convert.ToInt32(Convert.ToDouble(str_diemDanhGia));
+
+    ViewBag.og_url = title_url;
+    ViewBag.og_type = "article";
+    ViewBag.og_title = title;
+    ViewBag.og_description = description;
+    ViewBag.og_image = urlHinhAnh_image_path;
+    ViewBag.canonical = title_url;
+
+}
+
+
+<div id="container-details-truyen" class="row">
+    <div class="col-sm-12">
+        <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
+            <div class="iq-card-header d-flex justify-content-between align-items-center">
+                <h2 class="card-title mb-0">Thông tin truyện</h2>
+            </div>
+            <div class="iq-card-body pb-0 container">
+                <div class="description-contens align-items-top row">
+                    <div id="card-no-height" class="col-md-3 col-sm-12">
+                        @{
+                            await Html.RenderPartialAsync(@"..\Common\ItemCard.cshtml", new Dictionary<string, object>() { { "drItem", drItem }, { "css-col", "col-12" }, });
+                            await Html.RenderPartialAsync(@"XemTheoChuong.cshtml", dataModel);
+                        }
+                    </div>
+                    <div class="col-md-9 col-sm-12">
+                        <div class="iq-card-transparent iq-card-block iq-card-stretch iq-card-height">
+                            <div class="iq-card-body p-0">
+                                <h3 class="title mb-3 font-truyen" itemprop="name">@Html.Raw(title)</h3>
+                                <div class="mt-2">
+                                    @if (!string.IsNullOrEmpty(tenTacGia))
+                                    {
+                                        <p class="font-size-13 line-height mb-1 p-author max-line-0">
+                                            <strong>Tác giả:</strong>
+                                            <a itemprop="author" title="@Html.Raw(tenTacGia)" href="@Methods.GetFullURL(string.Format("/tac-gia-{0}", tenTacGia))">@Html.Raw(tenTacGia)</a>
+                                        </p>
+                                    }
+                                    @if (!string.IsNullOrEmpty(dsTheLoai))
+                                    {
+                                        var arrTheLoai = dsTheLoai.Split(",").Select(i => i.Trim()).ToList();
+                                        <p class="font-size-13 line-height mb-1 max-line-0 p-genre">
+                                            <strong>Thể loại:</strong>
+                                            @for (int i = 0; i < arrTheLoai.Count; i++)
+                                            {
+                                                var theLoai = arrTheLoai[i];
+                                                <a itemprop="genre" title="@Html.Raw(theLoai)" href="@Methods.GetFullURL(string.Format("/Truyen/Timkiem?theLoai=", Methods.RemoveToneMark(theLoai).Replace(" ","-")))">@Html.Raw(theLoai)</a>
+                                                if (i < arrTheLoai.Count - 1)
+                                                {
+                                                    @Html.Raw(",")
+                                                }
+                                            }
+                                        </p>
+                                    }
+                                </div>
+                                <div>
+                                    <span id="gioiThieuDayDu" class="d-block max-line-10" itemprop="description">
+                                        @Html.Raw(gioiThieu.ToHtml())
+                                    </span>
+                                </div>
+                                <div id="btn-gioiThieuDayDu" class="mb-2" style="text-align: center;cursor:pointer;">
+                                    <span onclick="hienThiGioiThieuDayDu()"><i style="color:var(--iq-primary);">Xem thêm</i></span>
+                                </div>
+                                <div class="iq-social d-flex align-items-center">
+                                    <h5 class="mr-2">Chia sẻ:</h5>
+                                    <ul class="list-inline d-flex p-0 mb-0 align-items-center">
+                                        <li>
+                                            <a href="#" onclick="shareLinkFaceBook('@Methods.GetFullURL(title_url)')" class="avatar-40 rounded-circle bg-primary mr-2 facebook">
+                                                <i class="fa fa-facebook" aria-hidden="true"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+
+                                    <h5 class="mr-2">Coppy link:</h5>
+                                    <ul class="list-inline d-flex p-0 mb-0 align-items-center">
+                                        <li>
+                                            <a href="#" onclick="copyLink('@Methods.GetFullURL(title_url)')" class="avatar-40 rounded-circle bg-primary mr-2">
+                                                <i class="fa fa-link" aria-hidden="true"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" id="expand-details-truyen">
+    @await Html.PartialAsync(@"Partial\DanhSachChuong.cshtml",Model)
+
+    @await Html.PartialAsync(@"..\Common\TrangChu\TruyenNoiBatTrongTuan.cshtml")
+    @*@await Html.PartialAsync(@"..\Common\TrangChu\DanhSach_TacGia_DuocYeuThich.cshtml")*@
+
+    @await Html.PartialAsync(@"..\Common\Truyen\DanhSach_CungTheLoai.cshtml")
+
+    @await Html.PartialAsync(@"..\Common\Truyen\DanhSach_XuHuong.cshtml")
+
+    @await Html.PartialAsync(@"..\Common\TrangChu\DanhSach_PhaiDocNgay.cshtml")
+
+    @await Html.PartialAsync(@"..\Common\Truyen\DanhSach_TheLoai.cshtml")
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modal-chuong" tabindex="-1" role="dialog" aria-labelledby="modal-title-chuong" aria-hidden="true" style="background-color:white;z-index: 9999;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="padding-bottom: 0px;border-bottom:unset;">
+                <div class="modal-title d-flex">
+                    <img height="40" src="@Html.Raw(urlHinhAnh_image_path)" />
+                    <h4 class="item-title-truyen ml-2 max-line-1"> @Html.Raw(title)</h4>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="w-100" style="padding: 5px;border-bottom: 1px solid #dee2e6;">
+                <select id="select-chuong" name="select-chuong" onchange="selectChuong_OnChange($(this))">
+                </select>
+                <label id="error-message-chuong" style="display:none"></label>
+            </div>
+            <div id="item-noidung-chuong" class="modal-body container">
+            </div>
+            <div class="modal-footer" style="padding-left:0;padding-right:0;">
+                <div class="w-100" style="display: flex;justify-content: space-evenly;">
+                    <div>
+                        <button id="item-button-chuongPhiaTruoc" type="button" class="item-button-chuong btn btn-primary" onclick="btnChuongPhiaTruocClick()">
+                            <i class="las la-chevron-left m-0  bt-icon"></i>
+                            <strong>Chương trước</strong>
+                        </button>
+                        <button id="item-button-chuongTiepTheo" type="button" class="item-button-chuong btn btn-primary" onclick="btnChuongPhiaSauClick()">
+                            <strong>Chương tiếp</strong>
+                            <i class="las la-chevron-right m-0"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var shown = false;
+        $(document).ready(function () {
+            $('#modal-chuong').on('shown.bs.modal', function (e) {
+                if (shown) return;
+                shown = true;
+                loadThongTinChuong();
+            });
+            qTruyen = '@Html.Raw(drItem["title_url"])';
+            select_Chuong = $('#select-chuong').select2({
+                dropdownParent: $('#modal-chuong')
+                ,
+            });
+            loadTableChapter(@id, '@Html.Raw(p2)', '@Html.Raw(title)', '@Html.Raw(uriChuong)', '@Html.Raw(txtChuong)');
+        });
+    </script>
+}

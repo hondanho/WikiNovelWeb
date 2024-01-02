@@ -1,0 +1,130 @@
+﻿@using WowCommon
+@using WowCore
+@using WowModel
+@using WowSQL
+@using System.Data
+@{
+
+} 
+<link href="~/assets/css/page/feedbackpanel.css" rel="stylesheet" />
+<button type="button" class="btn-phanhoi" data-toggle="modal" data-target="#PhanhoiModal">
+    <img src="~/Assets/images/icons/btn-phanhoi.png" />
+</button>
+<!-- Modal -->
+<div class="modal right fade" role="dialog" id="PhanhoiModal" tabindex="-1" aria-labelledby="PhanhoiModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-body">
+                    <h5>Góp ý tính năng</br>Hoặc yêu cầu truyện tại đây!</h5>
+                    <dl>
+                        <dt id="star-text">Hài lòng</dt>
+                        <dd>
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <button type="button">
+                                    <img id="star-@i" src="~/Assets/images/icon_rating/@Html.Raw(i+"_den.png")" onmouseout="star_onOut(@i)" onmouseover="star_onHouver(@i)" onclick="star_onClick(@i)" />
+                                </button>
+                            }
+                        </dd>
+                    </dl>
+                    <textarea id="noiDungPhanHoi" class="no-resize box-phanhoi" placeholder="Chia sẻ cảm nhận của bạn hoặc yêu cầu truyện mới tại đây!" onkeypress="noiDungPhanHoi_onChange()" onchange="noiDungPhanHoi_onChange()"></textarea>
+                </div>
+                <button id="btnGuiPhanHoi" type="button" class="btn btn-gray w-100" onclick="btnGuiPhanHoi_Click()">Gửi phản hồi</button>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- modal -->
+
+<script>
+    var default_start = 0;
+    var btnGuiPhanHoi  ;
+ 
+    function star_onClick(index) {
+        if (default_start == index) {
+            default_start = 0;
+
+        }
+        else {
+            default_start = index;
+        }
+    }
+    
+    function star_onOut() {
+        star_onHouver(default_start);
+    }
+    var arr_text = ['Chưa hài lòng', 'Chưa tốt', 'Tạm ổn', 'Hài lòng','Rất hài lòng',];
+    function star_onHouver(index) {
+        var mau = true;
+        for (var i = 1; i <= 5; i++) {
+            mau = index >= i;
+            if (mau) {
+                $('#star-' + i).attr("src", '/Assets/images/icon_rating/' + i + '_mau.png');
+            }
+            else {
+                $('#star-' + i).attr("src", '/Assets/images/icon_rating/' + i + '_den.png');
+            }
+        }
+        if (index > 0) {
+            $('#star-text').html(arr_text[index - 1]);
+        } else {
+            $('#star-text').html('');
+        }
+        noiDungPhanHoi_onChange();
+    }
+    function noiDungPhanHoi_onChange() {
+
+        if (!btnGuiPhanHoi)
+        {
+            btnGuiPhanHoi = $('#btnGuiPhanHoi');
+        }
+
+        if ($('#noiDungPhanHoi').val() != '' && default_start != 0) {
+            btnGuiPhanHoi.removeClass('btn-gray');
+            btnGuiPhanHoi.addClass('btn-green');
+        }
+        else {
+            btnGuiPhanHoi.removeClass('btn-green');
+            btnGuiPhanHoi.addClass('btn-gray');
+        }
+
+    }
+    function btnGuiPhanHoi_Click() {
+        if (btnGuiPhanHoi.hasClass('btn-gray')) return;
+
+        showLoading();
+        var valdata = {
+            soSao: default_start
+            , noiDungPhanHoi: $('#noiDungPhanHoi').val()
+            , url: window.location.toString()
+        };
+
+        $.ajax({
+            url: "/Feedback/Create",
+            type: "POST",
+            data: valdata,
+            //dataType: 'json',
+            success: function (data) {
+                hideLoading();
+                $('#noiDungPhanHoi').val('');
+                star_onHouver(0);
+                $('#PhanhoiModal').modal('hide');
+
+                swal.fire({
+                    html: 'Chúng tôi sẽ ghi nhận và phản hồi lại bạn trong thời gian sớm nhất',
+                    title: 'Cám ơn bạn đã phản hồi',
+                    showCancelButton: false,
+                });
+
+            }, error: function (err) {
+                hideLoading();
+                  swal.fire({
+                    html: 'Lỗi, dữ liệu chưa được lưu, vui lòng load lại trang và thử lại',
+                    title: 'Cám ơn bạn đã phản hồi',
+                    showCancelButton: false,
+                });
+            }
+        });
+    }
+</script>

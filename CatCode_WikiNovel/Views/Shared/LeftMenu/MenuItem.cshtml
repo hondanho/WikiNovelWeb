@@ -1,0 +1,14 @@
+﻿@using CatCode_WikiNovel.Controllers
+@using WowSQL
+@using WowCore
+@using System.Data
+@model Dictionary<string,string>
+@{
+
+    var uriRequest = Context.Request.Path.ToString();
+    string uri = Methods.GetFullURL(Model["uri"]);
+    string icon = Model["icon"];
+    string text = Model["text"];
+    string active = uriRequest == uri ? "active" : "";
+}   
+<li class="@active"><a href="@uri"><i class="@icon"></i>@Html.Raw(text)</a></li>

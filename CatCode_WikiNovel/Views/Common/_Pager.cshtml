@@ -1,0 +1,65 @@
+﻿@using WowCore
+@using WowSQL
+@using WowCommon
+@using System.Data
+@using System.Reflection
+@using System.Text.RegularExpressions;
+
+@{
+    string total = (string)Model["total"];
+    string current = (string)Model["current"];
+    string uriPage = (string)Model["uriPage"];
+    
+    int pageSize = 24;
+    int maxPage = 6;
+    Pager pager = new Pager(int.Parse(total), int.Parse(current), pageSize, maxPage);
+    uriPage = Methods.FormatURLPage(uriPage,"trang");
+
+}
+@if (pager.TotalPages == 0)
+{
+    return;
+}
+
+<ul class="pagination rounded-active justify-content-center mb-0">
+    <li class="page-item">
+        <a class="page-link" href="@string.Format(uriPage, 1)">
+            <i class="fa fa-angle-double-left"></i>
+        </a>
+    </li>
+    @if (pager.CurrentPage > 1)
+    {
+        <li class="page-item">
+            <a class="page-link" href="@string.Format(uriPage, pager.PrevPage)">
+                <i class="ri-arrow-left-s-line"></i>
+            </a>
+        </li>
+    }
+
+    @foreach (var pageNum in pager.Pages)
+    {
+        if (pageNum == pager.CurrentPage)
+        {
+            <li class="page-item active"><a class="page-link" href="#">@pageNum</a></li>
+        }
+        else
+        {
+            <li class="page-item"><a class="page-link" href="@string.Format(uriPage,pageNum)">@pageNum</a></li>
+        }
+    }
+    @if (pager.CurrentPage < pager.TotalPages)
+    {
+        <li class="page-item">
+            <a class="page-link" href="@string.Format(uriPage,pager.NextPage)">
+                <i class="fa fa-angle-right"></i>
+
+            </a>
+        </li>
+    }
+
+    <li class="page-item">
+        <a class="page-link" href="@string.Format(uriPage,pager.TotalPages)">
+            <i class="fa fa-angle-double-right"></i>
+        </a>
+    </li>
+</ul>

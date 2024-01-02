@@ -1,0 +1,50 @@
+﻿@using CatCode_WikiNovel.Controllers
+@using WowCommon
+@using WowCore
+@using WowSQL
+@using System.Data
+@{
+    var dt = Methods.GetSettingTable("cbb_TheLoaiTruyen");
+    if (dt == null)
+    {
+        return;
+    }
+}
+<div class="col-lg-12">
+    <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
+        @{
+            await Html.RenderPartialAsync(@"..\TitleCard.cshtml", new Dictionary<string, object>(){
+                {"icon","ri-archive-drawer-fill"},
+                {"title","Thể loại"},
+            });
+        }
+        <div class="iq-card-body single-similar-contens danhmuc-the-loai">
+            @foreach (DataRow drItem in dt.AsEnumerable().Where(dr => (int)dr["idLoaiTruyen"] == 1))
+            {
+                string? title = drItem["title"]?.ToString();
+                <div class="cell-the-loai">
+                    <a href="@String.Format("/Truyen/TimKiem?theLoai={0}",drItem["title_url"])" class="p-2">@Html.Raw(title)</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="col-lg-12">
+    <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
+        @{
+            await Html.RenderPartialAsync(@"..\TitleCard.cshtml", new Dictionary<string, object>(){
+        {"icon","ri-archive-drawer-fill"},
+        {"title","Truyện tranh"},
+        });
+        }
+        <div class="iq-card-body single-similar-contens danhmuc-the-loai">
+            @foreach (DataRow drItem in dt.AsEnumerable().Where(dr => (int)dr["idLoaiTruyen"] == 2))
+            {
+                string? title = drItem["title"]?.ToString();
+                <div class="cell-the-loai">
+                    <a href="@String.Format("/Truyen/TimKiem?theLoai={0}",drItem["title_url"])" class="p-2">@Html.Raw(title)</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>

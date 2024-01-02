@@ -1,0 +1,54 @@
+﻿@using CatCode_WikiNovel.Controllers
+@using WowSQL
+@using System.Data
+@using WowCore
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Ảnh</title>
+</head>
+<body>
+    <input type="file" id="fileInput">
+    <br />
+
+    <input type="text" id="title_url" placeholder="title_url">
+    <br />
+    <input type="text" id="key" placeholder="key">
+    <br />
+    <button onclick="uploadImage()">Tải Ảnh Lên</button>
+</body>
+<script>
+    function uploadImage() {
+    
+
+        var fileInput = document.getElementById('fileInput');
+        var file = fileInput.files[0];
+        var title_url = document.getElementById('title_url');
+        var key = document.getElementById('key');
+
+        
+        var formData = new FormData();
+        formData.append('file', file);
+        formData.append('title_url', title_url.value);
+        formData.append('key', key.value);
+
+        fetch('/api/upload', {
+            method: 'POST',
+            body: formData
+        }).then(response => {
+            if (response.status == 200) {
+                alert('Ảnh đã được tải lên thành công!');
+            }
+            else {
+                alert('Lỗi');
+            }
+        })
+        .catch(error => {
+            console.error('Lỗi:', error);
+        });
+    }
+</script>
+</html>

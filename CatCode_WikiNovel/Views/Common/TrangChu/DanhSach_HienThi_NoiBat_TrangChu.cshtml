@@ -1,0 +1,36 @@
+﻿@using CatCode_WikiNovel.Controllers
+@using WowSQL
+@using WowCore
+@using System.Data
+@{
+    var dt = Methods.GetSettingProcedure("sp_DanhSach_NoiBat_TrangChu");
+    if (!dt.AnyRow())
+    {
+        return;
+    }
+}
+<div class="col-lg-12">
+    <div class="iq-card-transparent iq-card-block iq-card-stretch iq-card-height rounded">
+        <div class="newrealease-contens">
+            <ul id="newrealease-slider" class="list-inline p-0 m-0 d-flex align-items-center">
+                @foreach (DataRow drItem in dt.Rows)
+                {
+                    string? title = drItem["title"]?.ToString();
+                    string? title_KhongDau = drItem["title_KhongDau"]?.ToString();
+                    title_KhongDau = title_KhongDau ?? "";
+                    title_KhongDau = title_KhongDau.Replace(" ", "-");
+                    string? urlHinhAnh_image_path = Methods.GetFullURL(drItem["urlHinhAnh_image_path"]?.ToString());
+                    if (string.IsNullOrEmpty(urlHinhAnh_image_path))
+                    {
+                        urlHinhAnh_image_path = "https://truyenfree.net/img2/tu-thu-tay-ha.png";
+                    }
+                    <li class="item">
+                        <a href="@Html.Raw(drItem["title_url"])">
+                            <img src="@Html.Raw(urlHinhAnh_image_path)" class="img-fluid w-100 rounded" alt="@title_KhongDau">
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,175 @@
+﻿<!doctype html>
+<html lang="vi">
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# book: http://ogp.me/ns/book# profile: http://ogp.me/ns/profile#">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="keywords" content="truyen miem phi, truyen full, truyen moi, truyen online, truyen khong quang cao" />
+    <meta name="robots" content="*" />
+    <meta name="author" content="linqPS">
+    <meta name="generator" content="linqPS">
+    <meta property="og:site_name" content="CatCode">
+    <link rel="shortcut icon" href="https://truyenfree.net/images/favicon.ico" />
+    @if (ViewBag.og_url == null)
+    {
+        <title>@Html.Raw(ViewBag.og_title)</title>
+        <meta property="og:url" content="https://truyenfree.net/" />
+        <meta property="og:title" content="Truyện free không quảng cáo" />
+        <meta property="og:description" content="Trang đọc truyện online hàng đầu miễn phí và không có quản cáo" />
+        <meta property="og:image" content="https://truyenfree.net/images/logo.png" />
+        <link rel="canonical" href="https://truyenfree.net/" />
+    }
+    else
+    {
+    <title>@Html.Raw(ViewBag.og_title)</title>
+    <meta property="og:url" content="@ViewBag.og_url" />
+    <meta property="og:type" content="@ViewBag.og_type" />
+    <meta property="og:title" content="@Html.Raw(ViewBag.og_title)" />
+    <meta property="og:description" content="@Html.Raw(ViewBag.og_description)" />
+    <meta property="og:image" content="@ViewBag.og_image" />
+    if(ViewBag.canonical != null)
+    {
+    <link rel="canonical" href="@ViewBag.canonical" />
+    }
+    }
+    <link rel="preconnect" href="https://www.google-analytics.com/">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css?v=5">
+    <!-- Typography CSS -->
+    <link rel="stylesheet" href="/css/typography.css?v=5">
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="/css/style.css?v=5">
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="/css/responsive.css">
+    <link rel="stylesheet" href="/css/custom.css?v=5">
+    <link rel="stylesheet" href="/customize/custom.css?v=5">
+    <link rel="stylesheet" href="/css/sweetalert2.min.css" />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TXVZFH6KNF"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-TXVZFH6KNF');
+    </script>
+</head>
+<body class="sidebar-main custom-sidebar">
+    <!-- loader Start -->
+    <div id="loading">
+        <div id="loading-center">
+            <img src="~/images/loader.gif" width="200" style="border-radius:5px;" />
+        </div>
+    </div>
+    <!-- loader END -->
+    <!-- Wrapper Start -->
+    <div class="wrapper">
+        @*@await Html.PartialAsync(@"_LeftMenu.cshtml")*@
+        <!-- TOP Nav Bar -->
+        <div class="iq-top-navbar">
+            <div class="iq-navbar-custom">
+                <nav class="navbar navbar-expand-lg navbar-light p-0">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                        @await Html.PartialAsync(@"_NavigationMenu.cshtml")
+                    </div>
+
+                    <div class="iq-menu-bt d-flex align-items-center">
+                        <div class="iq-navbar-logo d-flex justify-content-between">
+                            <a href="/" class="header-logo">
+                                <img src="/images/logo.png" class="img-fluid rounded-normal" alt="">
+                                <div class="logo-title">
+                                    <span class="text-primary text-uppercase">Truyện Free</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+               
+                    <div class="iq-search-bar">
+                        <div class="collapse navbar-collapse" >
+                            @await Html.PartialAsync(@"_NavigationMenu.cshtml")
+                        </div>
+                    </div>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-label="Toggle navigation">
+                        <i class="ri-menu-3-line"></i>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ml-auto navbar-list">
+                            <li class="nav-item nav-icon search-content" title="Tìm kiếm">
+                                <a href="/Truyen/TimKiem" class="iq-waves-effect text-gray rounded">
+                                    <i class="ri-search-line"></i>
+                                </a> 
+                            </li>
+                            <li class="nav-item nav-icon">
+                                <a href="#" class="search-toggle iq-waves-effect text-gray rounded" title="Thông báo">
+                                    <i class="ri-notification-2-line"></i>
+                                    <span class="bg-primary dots"></span>
+                                </a>
+                                <div class="iq-sub-dropdown">
+                                    <div class="iq-card shadow-none m-0">
+                                        <div class="iq-card-body p-0">
+                                            <div class="bg-primary p-3">
+                                                <h5 class="mb-0 text-white">Thông báo truyện mới<small class="badge  badge-light float-right pt-1"></small></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <!-- TOP Nav Bar END -->
+        <!-- Page Content  -->
+        <div id="content-page" class="content-page">
+            <div class="container">
+                @{
+                    await Html.RenderPartialAsync("~/Views/Shared/FeedBackPanel.cshtml");
+                }
+                @RenderBody()
+            </div>
+        </div>
+        <a id="button-back-to-top"></a>
+    </div>
+    <!-- Wrapper END -->
+    <!-- Footer -->
+    <footer class="iq-footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6">
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item"><a href="privacy-policy.html">Privacy Policy</a></li>
+                        <li class="list-inline-item"><a href="terms-of-service.html">Terms of Use</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-6 text-right">
+                    Copyright 2020 <a href="https://truyenfree.net/">Truyện Free</a> All Rights Reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/select2.min.js"></script>
+    <script src="/js/core.js"></script>
+    <script src="/js/animated.js"></script>
+    <script src="/js/morris.min.js"></script>
+    <script src="/js/style-customizer.js"></script>
+    <script src="/js/dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Custom JavaScript -->
+    <script src="/js/custom.js?v=3"></script>
+    <!-- Custom JavaScript -->
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script src="/customize/social.js"></script>
+    <script src="/customize/custom_wiki.js?v=8"></script>
+ 
+</body>
+</html>

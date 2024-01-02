@@ -1,0 +1,147 @@
+﻿@using CatCode_WikiNovel.Controllers
+@using WowSQL
+@using System.Data
+@using WowCore
+@model Dictionary<string,object>
+@{
+    var cbb_TheLoaiTruyen = Methods.GetSettingTable("cbb_TheLoaiTruyen");
+    if (cbb_TheLoaiTruyen == null)
+    {
+        return;
+    }
+    var cbb_TrangThaiTruyen = Methods.GetSettingTable("cbb_TrangThaiTruyen");
+    if (cbb_TrangThaiTruyen == null)
+    {
+        return;
+    }
+    string? tuKhoa = Model.ContainsKey("truyen") ? Model["truyen"]?.ToString() : "";
+    string? theLoai = Model.ContainsKey("theLoai") ? Model["theLoai"]?.ToString() : "";
+    string? trangThai = Model.ContainsKey("trangThai") ? Model["trangThai"]?.ToString() : "";
+    if (string.IsNullOrEmpty(trangThai) || ( trangThai.ToLower() != "full" && trangThai.ToLower() != "dang-ra"))
+    {
+        trangThai = "tat-ca";
+    }
+    int trang = Model.ContainsKey("trang") ? Convert.ToInt32(Model["trang"]) : 1;
+    var idTheLoai = -1;
+    var txtTheLoai = "";
+    var idLoaiTruyen = 1;
+    var title_url = "";
+    if (theLoai != null && theLoai.Split(',',StringSplitOptions.RemoveEmptyEntries).Count() <= 1)
+    {
+        theLoai = theLoai.Replace(",", "");
+    }
+    var drTheLoaiSelected = cbb_TheLoaiTruyen.AsEnumerable().Where(dr => dr["title_KhongDau"] != DBNull.Value && Convert.ToString(dr["title_url"])?.ToLower() == theLoai?.ToLower()).FirstOrDefault();
+    if (drTheLoaiSelected != null)
+    {
+        txtTheLoai = Convert.ToString(drTheLoaiSelected["title"]);
+        idTheLoai = Convert.ToInt32(drTheLoaiSelected["ID"]);
+        title_url = Convert.ToString(drTheLoaiSelected["title_url"]);
+        idLoaiTruyen = Convert.ToInt32(drTheLoaiSelected["idLoaiTruyen"]);
+    }
+
+    if (!string.IsNullOrEmpty(txtTheLoai) && txtTheLoai != "tat-ca")
+    {
+        ViewBag.og_type = "article";
+        ViewBag.og_description = "Đọc truyện " + txtTheLoai + " hàng đầu Việt Nam luôn luôn miễn phí, được tuyển chọn và đăng tải liên tục chắn chắn sẽ khiến bạn hài lòng.";
+        ViewBag.og_image = Methods.GetFullURL("/theLoai/" + title_url + ".jpg");
+        ViewBag.canonical = Methods.GetFullURL("/Truyen/TimKiem?theLoai=" + title_url);
+        ViewBag.og_url = ViewBag.canonical;
+        txtTheLoai = "Free Truyện " + txtTheLoai.Replace("Truyện","");
+        ViewBag.og_title = txtTheLoai;
+    }
+    else
+    {
+        ViewBag.og_type = "article";
+        ViewBag.og_description = "Đọc truyện hàng đầu Việt Nam luôn luôn miễn phí, được tuyển chọn và đăng tải liên tục chắn chắn sẽ khiến bạn hài lòng.";
+        ViewBag.og_image = "https://truyenfree.net/img2/toi-cuong-than-thoai-de-hoang.png";
+        ViewBag.canonical = Methods.GetFullURL("/Truyen/TimKiem");
+        ViewBag.og_url = ViewBag.canonical;
+        ViewBag.og_title = "Tìm kiếm truyện";
+    }
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="iq-card-transparent mb-0">
+            <div class="d-block text-center iq-search-filter">
+                <h2 class="mb-3">Tìm kiếm theo tên truyện hoặc tên tác giả</h2>
+                <div class="w-100">
+                    <ul class="list-inline p-0 m-0 row justify-content-center search-menu-options">
+                        <li class="search-menu-opt search-menu-opt-dropdown  mb-2">
+                            <div class="iq-dropdown">
+                                <div class="form-group mb-0">
+                                    <select class="form-control form-search-control bg-white border-0" id="cbb_TrangThaiTruyen">
+                                        @foreach (DataRow drTrangThai in cbb_TrangThaiTruyen.Rows)
+                                        {
+                                            <!option @Html.Raw(trangThai == Convert.ToString(drTrangThai["title_url"]) ? "selected" : "")  value="@drTrangThai["title_url"]" >@drTrangThai["title"]</!option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="search-menu-opt mb-2">
+                            <div class="iq-search-bar search-book d-flex align-items-center" style="justify-content:space-between;">
+                                <!form action="#" class="searchbox">
+                                <input id="txt-truyen-search-box" type="text" class="text search-input" placeholder="Tên truyện, Tên tác giả..." onkeypress="return searchTruyenKeyPress(event);" value="@Html.Raw(tuKhoa)">
+                                <a class="search-link" href="#" style="cursor:pointer;" onclick="btn_TimTruyen_Click()"><i class="ri-search-line"></i></a>
+                                </!form>
+                                <button id="btnSearch" type="button" class="btn btn-primary search-data ml-2" onclick="btn_TimTruyen_Click()">&nbsp;&nbsp;<i class="las la-search mr-0"></i>&nbsp;&nbsp;</button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="w-100">
+                    <div class="iq-dropdown">
+                        <div class="form-group mb-0">
+                            <select class="form-control form-search-control bg-white border-0" id="cbb_TheLoaiTruyen" multiple="multiple">
+                               <!optgroup label="Truyện chữ">
+                                    @foreach (DataRow drTheLoai in cbb_TheLoaiTruyen.AsEnumerable().Where(dr => (int)dr["idLoaiTruyen"] == 1))
+                                    {
+                                        <!option  @Html.Raw(idTheLoai == Convert.ToInt32(drTheLoai["ID"]) ? "selected" : "")  value="@drTheLoai["title_url"]" >@drTheLoai["title"]</!option>
+                                    }
+                                </!optgroup>
+                                <!optgroup label="Truyện tranh">
+                                    @foreach (DataRow drTheLoai in cbb_TheLoaiTruyen.AsEnumerable().Where(dr => (int)dr["idLoaiTruyen"] == 2))
+                                    {
+                                    <!option  @Html.Raw(idTheLoai == Convert.ToInt32(drTheLoai["ID"]) ? "selected" : "")  value="@drTheLoai["title_url"]" >@drTheLoai["title"]</!option>
+                                    }
+                                </!optgroup>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
+            @{
+                await Html.RenderPartialAsync(@"..\Common\TitleCard.cshtml", new Dictionary<string, object>(){
+            {"icon","ri-find-replace-fill"},
+            {"title", "Danh sách kết quả"},
+            //{"title-id","title-ds-ket-qua"},
+            });
+            }
+            <div class="iq-card-body">
+                <div class="row" id="lst-ket-qua-tim-kiem"></div>
+                <div class="row" style="justify-content:center;"><nav class="pt-6" id="pagination-ket-qua-tim-kiem"></nav></div>
+            </div>
+        </div>
+    </div>
+
+    @await Html.PartialAsync(@"..\Common\Truyen\DanhSach_TheLoai.cshtml")
+
+    @await Html.PartialAsync(@"..\Common\Truyen\DanhSach_XuHuong.cshtml")
+
+    @await Html.PartialAsync(@"..\Common\TrangChu\DanhSach_PhaiDocNgay.cshtml")
+
+
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            setupDanhMucTruyen({ tuKhoa: '@Html.Raw(tuKhoa)', theLoai: '@Html.Raw(theLoai)', trang: '@Html.Raw(trang)', trangThai: '@Html.Raw(trangThai)' });
+        });
+    </script>
+}

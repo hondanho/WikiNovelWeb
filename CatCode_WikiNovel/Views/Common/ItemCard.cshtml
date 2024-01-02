@@ -1,0 +1,106 @@
+﻿@using CatCode_WikiNovel.Controllers
+@using WowSQL
+@using WowCore
+@using System.Data
+@model Dictionary<string,object>
+@{
+    DataRow drItem = (DataRow)Model["drItem"];
+    string css_col = Model.ContainsKey("css-col") ? (string)Model["css-col"] : "";
+
+    string? title_KhongDau = drItem["title_KhongDau"]?.ToString();
+    string? title = drItem["title"]?.ToString();
+    string? tenTacGia = drItem["tenTacGia"]?.ToString();
+    string? dsTheLoai = drItem["dsTheLoai"]?.ToString();
+    string? urlHinhAnh_image_path = Methods.GetFullURL(drItem["urlHinhAnh_image_path"]?.ToString());
+    if (string.IsNullOrEmpty(urlHinhAnh_image_path))
+    {
+        urlHinhAnh_image_path = "https://truyenfree.net/img2/tu-thu-tay-ha.png";
+    }
+    string? title_url = Methods.GetFullURL(string.Format("?tenTruyen={0}", drItem["title_url"]));
+    double diemDanhGia = Convert.ToDouble(drItem["diemDanhGia"]?.ToString() ?? "0");
+    var soLuotDanhGia = Convert.ToDouble(drItem["soLuotDanhGia"]);
+    var description = Convert.ToString(drItem["description"]);
+    var gioiThieu = Convert.ToString(drItem["gioiThieu"]);
+    var trangThaiTruyen = Convert.ToString(drItem["trangThaiTruyen"]);
+    var truyenTranh = drItem["idLoaiTruyen"].ToString() == "1" ? "" : "Truyện tranh";
+    var soLuongChuong = Convert.ToDouble(drItem["soLuongChuong"] != DBNull.Value ? drItem["soLuongChuong"] : 0);
+}
+<div class="@Html.Raw(string.IsNullOrEmpty(css_col) ? "col-6 col-sm-3 col-md-3 col-lg-2 col-xl-2" : css_col)">
+    <div class="iq-card iq-card-block iq-card-stretch iq-card-height browse-bookcontent">
+        <div class="iq-card-body p-0">
+            <div class="row">
+                <div class="col-12 position-relative">
+                    <div class="mb-3 card">
+                        <div class="imgBox">
+                            <a href="@Html.Raw(title_url)">
+                                <img class="img" loading="lazy" src="@urlHinhAnh_image_path" alt="@Html.Raw(title)" itemprop="image" title="@Html.Raw(title)">
+                            </a>
+                            <div class="details-button">
+                                <div class="view-book">
+                                    <a href="@Html.Raw(title_url)" class="btn btn-sm btn-white">Đọc ngay</a>
+                                </div>
+                            </div>
+                            @if (!string.IsNullOrEmpty(trangThaiTruyen))
+                            {
+                                <div class="imgBox-trangThai">
+                                    <span>@Html.Raw(trangThaiTruyen)</span>
+                                </div>
+                            }
+                            @if (!string.IsNullOrEmpty(truyenTranh))
+                            {
+                                <div class="imgBox-truyenTranh">
+                                    <span>@Html.Raw(truyenTranh)</span>
+                                </div>
+                            }
+                        </div>
+                        <div class="details">
+                            @if (soLuongChuong > 0)
+                            {
+                                <p class="font-size-13 line-height mb-1 p-author text-center">
+                                    <strong>
+                                        @Html.Raw(soLuongChuong.ToMoneySmall()) chương
+                                    </strong>
+                                </p>
+                            }
+                            <a href="@Html.Raw(title_url)">
+                                <p class="font-size-13 line-height mb-1 p-description">
+                                    <span itemprop="description">
+                                        @Html.Raw(gioiThieu)
+                                    </span>
+                                </p>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="mb-2 a-name">
+                        <a href="@title_url" itemprop="url">
+                            <h6 class="mb-0 item-title-truyen-list" itemprop="name" title="@Html.Raw(title)">@Html.Raw(title)</h6>
+                        </a>
+                        @if(soLuotDanhGia > 0)
+                        {
+                            <div class="d-block line-height text-center" title="@Html.Raw(diemDanhGia + "/10 từ " + soLuotDanhGia.ToMoneySmall() + " lượt")">
+                                <span class="font-size-11 text-warning">
+                                    @for (int i = 1; i <= 10; i++)
+                                    {
+                                        if (i > diemDanhGia)
+                                        {
+                                            break;
+                                        }
+                                        @if (diemDanhGia - i >= 0.5 && diemDanhGia - i < 1)
+                                        {
+                                            <i class="fa fa-star-half"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fa fa-star"></i>
+                                        }
+                                    }
+                                </span>
+                            </div>
+                            <div class="small text-center" itemprop="aggregateRating" itemtype="https://schema.org/AggregateRating"><em><strong><span itemprop="ratingValue">@diemDanhGia</span></strong>/<span class="text-muted" itemprop="bestRating">10</span><meta itemprop="worstRating" content="1"> từ <strong><span itemprop="ratingCount">@soLuotDanhGia.ToMoneySmall()</span> lượt</strong></em></div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

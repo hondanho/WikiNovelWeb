@@ -1,0 +1,95 @@
+﻿@using CatCode_WikiNovel.Controllers
+@using WowSQL
+@using WowCore
+@using System.Data
+@{
+    var dt = Methods.GetSettingTable("cbb_TheLoaiTruyen");
+    if (dt == null)
+    {
+        return;
+    }
+    var dictNoiBat = new List<Dictionary<string, string>>() {
+        new Dictionary<string, string>  (){{"title","Truyện mới cập nhật"},{"link","/Truyen/TimKiem?theLoai=moi-cap-nhat"}},
+        new Dictionary<string, string>  (){{"title","Truyệt Hot"},{"link","/Truyen/TimKiem?theLoai=hot/"}},
+        new Dictionary<string, string>  (){{"title","Truyện đã hoàn thành"},{"link","/Truyen/TimKiem?theLoai=da-hoan-thanh"}},
+        new Dictionary<string, string>  (){{"title","Tiên hiệp hay"},{"link","/Truyen/TimKiem?theLoai=tien-hiep"}},
+        new Dictionary<string, string>  (){{"title","Kiếp hiệp hay"},{"link","/Truyen/TimKiem?theLoai=kiem-hiep"}},
+        new Dictionary<string, string>  (){{"title","Ngôn tình ngược"},{"link","/Truyen/TimKiem?theLoai=ngon-tinh"}},
+        new Dictionary<string, string>  (){{"title","Ngôn tình sủng"},{"link","/Truyen/TimKiem?theLoai=sung"}},
+        new Dictionary<string, string>  (){{"title","Đam mỹ hài"},{"link","/Truyen/TimKiem?theLoai=dam-my"}},
+        new Dictionary<string, string>  (){{"title","Bách hợp sắc"},{"link","/Truyen/TimKiem?theLoai=bach-hop"}},
+    };
+
+
+    var dictDoDai = new List<Dictionary<string, string>>() {
+        new Dictionary<string, string>  (){{"title","Dưới 100 chương"},{"link","/Truyen/TimKiem"}},
+        new Dictionary<string, string>  (){{"title","100 - 500 chương"},{"link","/Truyen/TimKiem"}},
+        new Dictionary<string, string>  (){{"title","500 - 1000 chương"},{"link","/Truyen/TimKiem"}},
+        new Dictionary<string, string>  (){{"title","Trên 1000 chương"},{"link","/Truyen/TimKiem"}},
+    };
+} 
+<ul class="navbar-nav">
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="nav-TuyenTap" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-bookmark-3-line"></i>
+            Nổi bật
+        </a>
+        <div class="dropdown-menu" aria-labelledby="nav-TuyenTap">
+            <div class="grid-container-1">
+                @foreach (var item in dictNoiBat)
+                {
+                    string url = Methods.GetFullURL(item["link"]);
+                    string? title = item["title"];
+
+                    <div class="grid-item">
+                        <a itemprop="url" class="dropdown-item" href="@url">@Html.Raw(title)</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="nav-TheLoai" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-file-list-2-line"></i>
+            Thể loại
+        </a>
+        <div class="dropdown-menu" aria-labelledby="nav-TheLoai">
+            <div class="grid-container-3">
+                @foreach (DataRow drItem in dt.AsEnumerable().Where(dr=> (int)dr["idLoaiTruyen"] == 1))
+                {
+                    string url = Methods.GetFullURL(string.Format("/Truyen/TimKiem?theLoai={0}", drItem["title_url"]));
+                    string? title = drItem["title"]?.ToString();
+
+                    <div class="grid-item">
+                        <a itemprop="url" class="dropdown-item" href="@url">@Html.Raw(title)</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="nav-TheLoai" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-image-2-line"></i>
+            Truyện tranh
+        </a>
+        <div class="dropdown-menu" aria-labelledby="nav-TheLoai">
+            <div class="grid-container-3">
+                @foreach (DataRow drItem in dt.AsEnumerable().Where(dr => (int)dr["idLoaiTruyen"] == 2))
+                {
+                    string url = Methods.GetFullURL(string.Format("/Truyen/TimKiem?theLoai={0}", drItem["title_url"]));
+                    string? title = drItem["title"]?.ToString();
+
+                    <div class="grid-item">
+                        <a itemprop="url" class="dropdown-item" href="@url">@Html.Raw(title)</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/Truyen/TimKiem">
+            <i class="ri-search-line"></i>
+            Tìm kiếm
+        </a>
+    </li>
+</ul>

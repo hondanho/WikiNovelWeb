@@ -1,0 +1,60 @@
+﻿@using CatCode_WikiNovel.Controllers
+@using WowCommon
+@using WowCore
+@using WowSQL
+@using System.Data
+@{
+    var dt = Methods.GetSettingProcedure("sp_DanhSachTacGiaYeuThich");
+    if (!dt.AnyRow())
+    {
+        return;
+    }
+}
+
+
+<div class="col-lg-6">
+    <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
+        @{
+            await Html.RenderPartialAsync(@"..\TitleCard.cshtml", new Dictionary<string, object>(){
+        {"icon","ri-contacts-book-2-fill"},
+        {"title","Tác giả được yêu thích"},
+        {"text_right_button","Xem thêm"},
+        {"url_right_button","/Truyen/TimKiem"},
+        });
+        }
+        <div class="iq-card-body">
+            <ul class="list-inline row mb-0 align-items-center iq-scrollable-block">
+                @foreach (DataRow drItem in dt.Rows)
+                {
+                    string? title_KhongDau = drItem["title_KhongDau"]?.ToString();
+                    title_KhongDau = title_KhongDau ?? "";
+                    title_KhongDau = title_KhongDau.Replace(" ", "-");
+                    string? title = drItem["title"]?.ToString();
+                    string? tenTacGia = drItem["tenTacGia"]?.ToString();
+                    string? dsTheLoai = drItem["dsTheLoai"]?.ToString();
+                    string? gioiThieu = drItem["gioiThieu"]?.ToString(); gioiThieu = gioiThieu ?? "";
+                    string? urlHinhAnh_image_path = Methods.GetFullURL(drItem["urlHinhAnh_image_path"]?.ToString());
+                    if (string.IsNullOrEmpty(urlHinhAnh_image_path))
+                    {
+                        urlHinhAnh_image_path = "https://truyenfree.net/img2/tu-thu-tay-ha.png";
+                    }
+                    string? title_url = Methods.GetFullURL(string.Format("?tenTruyen={0}", drItem["title_url"]));
+                    string? str_diemDanhGia = drItem["diemDanhGia"]?.ToString();
+                    var soLuotDanhGia = Convert.ToDouble(drItem["soLuotDanhGia"]);
+                    str_diemDanhGia = str_diemDanhGia ?? "0";
+                    int diemDanhGia = Convert.ToInt32(Convert.ToDouble(str_diemDanhGia));
+
+                    <li class="col-sm-6 d-flex mb-3 align-items-center">
+                        <div class="icon iq-icon-box mr-3">
+                            <a href="@title_url"><img class="img-fluid avatar-60 rounded-circle" src="@urlHinhAnh_image_path" alt="@title_KhongDau"></a>
+                        </div>
+                        <div class="mt-1">
+                            <h6><a href="@title_url">@Html.Raw(tenTacGia)</a></h6>
+                            <p class="mb-0 text-primary">Lượt xem: <span class="text-body">@soLuotDanhGia.ToMoneySmall()</span></p>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
