@@ -17,15 +17,20 @@ namespace CatCode_WikiNovel.Controllers
         private readonly ILogger<TruyenController> _logger;
         private readonly IWebHostEnvironment _hostEnvironment;
         private DriveService _googleDriveService;
+        private readonly IConfiguration _configuration;
 
-        public TruyenController(ILogger<TruyenController> logger, IWebHostEnvironment environment) : base()
+        public TruyenController(ILogger<TruyenController> logger, IWebHostEnvironment environment, IConfiguration configuration) : base()
         {
             _logger = logger;
             _hostEnvironment = environment;
-            if(_googleDriveService == null)
+            _configuration = configuration;
+            if (_googleDriveService == null)
             {
                 //phuongthuyyentrinh@gmail.com
-                string jsonCREDENTIALS = "{\"type\": \"service_account\",  \"project_id\": \"truyenfree\",  \"private_key_id\": \"57967b961eafb6cd5c134c40cf8f788e4bced2f9\",  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCXY+nLjf0kuNPP\\nH3316oSQWcKNSRQVIZYSty5i+ROJTFQAID562xKEM4VDUHqfpLsY1TBQnQK1gANO\\n44qWURMn9hr2VZsSQlApiA1pjTyVcDOdFCN5A133FaajdIfc2GqiRfqCZ/DZwlVN\\nLTIEow41wE8eQuepNPTcl7ADdXNrY3YI4nLScpUrE8tis4I24uGJs6gePWhV1Yri\\ndYeuDNJ+nZFzka8xj6blWSl+vzFCHpuKXZiWoZV3LEFJn4uSDK3Ntf9p6qpNOnq2\\nsv2m1xVQDF6sj9dqTBIf1X4FUBGcC29MrBL91gQOP6CAC0sE1f4FnGXRY+nzJWXR\\nlfKLGFNBAgMBAAECggEAIX5p9e6aoJrBxdPmVteFb7hkKkUOS+SL4uUjPqNzto8s\\nEIERwbWhQZ1ycOOn1ZUpDcPw9gze0hAZ60S9Xydd0RwKeBCVh/Mi8CVZLk6gpkFW\\nMf0IIhhkHCvum8BG5M3+vZs04tAjQdJUdAg5RjxbAvpipsPPpCiCuiFXQFSmbg4S\\nrSsN70J+SCWI1qCY+RQixCxojeg1q+V+9tcHzMgqcC4LWGFjLqBrHwgpYzgJNiRY\\nXV6dTC/3x76NrTWvNdvwCcISu0UxlsHC+Ijw0S1zQNFQfGlZ+G7AOEUxJdJl4bZL\\nZhz3ueRF/y07tG10Too5XD9EVGZQS3OiIGxUQOizTwKBgQDFvWBs3Sxov5hzBfRa\\nitQV6kEH3t9Ri2BTrIYldX3gRAvMaAx/LTNtiwfkTQg3MkjFkFSdahDJOZUSVCC+\\n8SgwN+SgQHMS5Pxnnez30cFqNxy60XFzcbBpIO/NzizUti2WXfAeiKlF8Al1yAOU\\nqk2inZHgX+GnC9soS8u1NA5RnwKBgQDD/pqkd1YyBelOPh+2cUVdA0L6Ul6L8+bg\\nkV2bMw8omjzRh2pk0P9wQ15oWVXu2yrHFs44Qfx44ASSO5dZ4f7hAqMmKb38ziL6\\nT8gb2Ncx0Kt3OhnR2w6kBnSYfp3D8e5jjv0/s0dsKSdz7z7q9YqBBcaN0XBhpXYx\\naOWn6jfvHwKBgCL6ifkX8sggxE3siroNftDVnGVRBn39Qq/qf9xWeUrXnqKs8TD6\\nBPPmuSGogsCI05inHGCwJ4IA/p68ZQKB1FMbQAUdAX4hJYkKxaVc5HLuhtWBQSlj\\nvgoKuoDUbNe/1jaYLWapVBA8EuBT3lZI/ey7JNfk/hy3my/4oHNQXwwPAoGBAKUG\\n5hMBYJRyIcX9zRoDOhJdQrIfVPimf4orHBQn4+WeKQOL7+u/hrVyJDXcstyRse08\\nqJr6BKmKho7SmlfWUJQJcnIZx5zrvMvjDW1VIa0SNK4JP+BRgHxf6yDTy+dG+CDg\\nLyDJxaOu60dU9TdFVD/bKxoSdXvipChqWKUQM9SlAoGAL24s6XbW4W0NBg0+Cseu\\nMvUZl0EzER0P7ppSDeK/BAIqXgvJgEcalg2HVOEfjyle6DbE82p9+FjK22B+Npo6\\nUnwbkKx6hBJlA+NvmEF0rycuRoJ/EyF4pqUkJUEWvx4ZRU6JU5ll3aYcbxwIPtwO\\nH4W9+eN2Bni2B3uDy/xG/o8=\\n-----END PRIVATE KEY-----\\n\",  \"client_email\": \"wikinovel-service-account@truyenfree.iam.gserviceaccount.com\",  \"client_id\": \"108740878997144217116\",  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",  \"token_uri\": \"https://oauth2.googleapis.com/token\",  \"auth_provider_x509_cert_url\": \"https://www.googleapis.com/oauth2/v1/certs\",  \"client_x509_cert_url\": \"https://www.googleapis.com/robot/v1/metadata/x509/wikinovel-service-account%40truyenfree.iam.gserviceaccount.com\"}";
+                //string jsonCREDENTIALS = "{\"type\": \"service_account\",  \"project_id\": \"truyenfree\",  \"private_key_id\": \"57967b961eafb6cd5c134c40cf8f788e4bced2f9\",  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCXY+nLjf0kuNPP\\nH3316oSQWcKNSRQVIZYSty5i+ROJTFQAID562xKEM4VDUHqfpLsY1TBQnQK1gANO\\n44qWURMn9hr2VZsSQlApiA1pjTyVcDOdFCN5A133FaajdIfc2GqiRfqCZ/DZwlVN\\nLTIEow41wE8eQuepNPTcl7ADdXNrY3YI4nLScpUrE8tis4I24uGJs6gePWhV1Yri\\ndYeuDNJ+nZFzka8xj6blWSl+vzFCHpuKXZiWoZV3LEFJn4uSDK3Ntf9p6qpNOnq2\\nsv2m1xVQDF6sj9dqTBIf1X4FUBGcC29MrBL91gQOP6CAC0sE1f4FnGXRY+nzJWXR\\nlfKLGFNBAgMBAAECggEAIX5p9e6aoJrBxdPmVteFb7hkKkUOS+SL4uUjPqNzto8s\\nEIERwbWhQZ1ycOOn1ZUpDcPw9gze0hAZ60S9Xydd0RwKeBCVh/Mi8CVZLk6gpkFW\\nMf0IIhhkHCvum8BG5M3+vZs04tAjQdJUdAg5RjxbAvpipsPPpCiCuiFXQFSmbg4S\\nrSsN70J+SCWI1qCY+RQixCxojeg1q+V+9tcHzMgqcC4LWGFjLqBrHwgpYzgJNiRY\\nXV6dTC/3x76NrTWvNdvwCcISu0UxlsHC+Ijw0S1zQNFQfGlZ+G7AOEUxJdJl4bZL\\nZhz3ueRF/y07tG10Too5XD9EVGZQS3OiIGxUQOizTwKBgQDFvWBs3Sxov5hzBfRa\\nitQV6kEH3t9Ri2BTrIYldX3gRAvMaAx/LTNtiwfkTQg3MkjFkFSdahDJOZUSVCC+\\n8SgwN+SgQHMS5Pxnnez30cFqNxy60XFzcbBpIO/NzizUti2WXfAeiKlF8Al1yAOU\\nqk2inZHgX+GnC9soS8u1NA5RnwKBgQDD/pqkd1YyBelOPh+2cUVdA0L6Ul6L8+bg\\nkV2bMw8omjzRh2pk0P9wQ15oWVXu2yrHFs44Qfx44ASSO5dZ4f7hAqMmKb38ziL6\\nT8gb2Ncx0Kt3OhnR2w6kBnSYfp3D8e5jjv0/s0dsKSdz7z7q9YqBBcaN0XBhpXYx\\naOWn6jfvHwKBgCL6ifkX8sggxE3siroNftDVnGVRBn39Qq/qf9xWeUrXnqKs8TD6\\nBPPmuSGogsCI05inHGCwJ4IA/p68ZQKB1FMbQAUdAX4hJYkKxaVc5HLuhtWBQSlj\\nvgoKuoDUbNe/1jaYLWapVBA8EuBT3lZI/ey7JNfk/hy3my/4oHNQXwwPAoGBAKUG\\n5hMBYJRyIcX9zRoDOhJdQrIfVPimf4orHBQn4+WeKQOL7+u/hrVyJDXcstyRse08\\nqJr6BKmKho7SmlfWUJQJcnIZx5zrvMvjDW1VIa0SNK4JP+BRgHxf6yDTy+dG+CDg\\nLyDJxaOu60dU9TdFVD/bKxoSdXvipChqWKUQM9SlAoGAL24s6XbW4W0NBg0+Cseu\\nMvUZl0EzER0P7ppSDeK/BAIqXgvJgEcalg2HVOEfjyle6DbE82p9+FjK22B+Npo6\\nUnwbkKx6hBJlA+NvmEF0rycuRoJ/EyF4pqUkJUEWvx4ZRU6JU5ll3aYcbxwIPtwO\\nH4W9+eN2Bni2B3uDy/xG/o8=\\n-----END PRIVATE KEY-----\\n\",  \"client_email\": \"wikinovel-service-account@truyenfree.iam.gserviceaccount.com\",  \"client_id\": \"108740878997144217116\",  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",  \"token_uri\": \"https://oauth2.googleapis.com/token\",  \"auth_provider_x509_cert_url\": \"https://www.googleapis.com/oauth2/v1/certs\",  \"client_x509_cert_url\": \"https://www.googleapis.com/robot/v1/metadata/x509/wikinovel-service-account%40truyenfree.iam.gserviceaccount.com\"}";
+                
+                // wintb
+                string jsonCREDENTIALS = _configuration["CREDENTIALS_GG_Drive"];
 
 
                 //nguyendongquan@gmail.com
@@ -36,8 +41,8 @@ namespace CatCode_WikiNovel.Controllers
                 _googleDriveService = new DriveService(new BaseClientService.Initializer
                 {
                     HttpClientInitializer = credential,
-                    ApplicationName = "TruyenFree.Net"
-                });
+                    ApplicationName = _configuration["ApplicationName"]
+            });
             }
         }
 

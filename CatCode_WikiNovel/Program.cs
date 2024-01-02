@@ -11,7 +11,21 @@ WowCommon.Common.HIEN_THI_ID_WEB = false;
 var connection = EConnection.TruyenFree;
 WowCommon.Common.EConnection = connection;
 
-SqlHelper.SetDBConnectionInfo("202.92.7.204\\MSSQLSERVER2019,1437", "wikinovel", "sa_wikinovel", "@xuq#xlkAA_host");
+var configuration = new ConfigurationBuilder()
+           .SetBasePath(Directory.GetCurrentDirectory())
+           .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+           .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
+           .AddEnvironmentVariables()
+           .Build();
+
+// Now you can use Configuration anywhere in your Program class
+//SqlHelper.connectionString = configuration["SQL_CONNECTION"];
+SqlHelper.SetDBConnectionInfo(
+    configuration["SQL_CONNECTION_JSON:Server"],
+    configuration["SQL_CONNECTION_JSON:Database"],
+    configuration["SQL_CONNECTION_JSON:User"],
+    configuration["SQL_CONNECTION_JSON:Password"]
+);
 
 Common.UsingCompareUI = false;
 SqlHelper.IsCacheParam = false;
